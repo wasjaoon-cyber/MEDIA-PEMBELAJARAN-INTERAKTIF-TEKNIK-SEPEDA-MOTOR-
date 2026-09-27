@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/><title>Media Pembelajaran Interaktif — Sistem Starter</title>
+<style>
+:root{
+  --primary:#1769e0;--primary-dark:#0b477f;--text:#17324d;
+  --muted:#65788b;--bg:#f3f7fc;--card:#fff;--border:#d9e3ef;
+  --shadow:0 8px 24px rgba(20,55,95,.09)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;padding:26px 18px 30px;box-shadow:0 3px 14px rgba(0,0,0,.12)}
+.wrap{max-width:1160px;margin:auto}
+.back{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.45);padding:9px 14px;border-radius:10px;display:inline-block;background:rgba(255,255,255,.08)}
+.back:hover{background:rgba(255,255,255,.18)}
+header h1{margin:16px 0 5px;font-size:clamp(25px,4vw,40px);line-height:1.2}
+header p{margin:4px 0;opacity:.96}
+.nav-wrap{position:sticky;top:0;z-index:1000;background:rgba(243,247,252,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:12px 10px}
+.nav{display:flex;gap:8px;overflow-x:auto;flex-wrap:nowrap;justify-content:flex-start;margin:0 auto;max-width:1160px;padding:2px}
+.nav button,.subnav button,.btn{border:1px solid var(--border);border-radius:11px;padding:11px 15px;background:#fff;color:#123b73;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06);white-space:nowrap;transition:.18s ease}
+.nav button:hover,.subnav button:hover,.btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(0,0,0,.09)}
+.nav button.active,.subnav button.active,.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+main{padding:26px 0 10px}
+main>.page{width:100%}
+#materi{width:100%}
+#materi>.material{width:100%;max-width:100%;margin:0 0 20px}
+.page{display:none}
+.page.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px;margin-bottom:20px;box-shadow:var(--shadow)}
+.card>h2{margin-top:0;color:#123b73}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.box{background:#f7faff;border:1px solid #d8e4f2;border-left:5px solid var(--primary);padding:18px;border-radius:13px}
+.box h3,.box h4{margin-top:0;color:#123b73}
+.note{padding:15px 17px;background:#eef7ff;border:1px solid #d5e7fa;border-radius:12px;margin:17px 0}
+.subnav{display:flex;gap:8px;overflow-x:auto;flex-wrap:nowrap;padding:5px 2px 12px;margin:0}
+.material{display:none;margin-top:8px}
+.material.active{display:block}
+#materi>.material>.badge{margin-top:4px}
+#materi>.material>h3{margin:10px 0 18px}
+#materi>.material>.subnav{margin-bottom:12px}
+#materi>.material>.panel{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+.material-title{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:15px;box-shadow:var(--shadow)}
+.panel{display:none}
+.panel.active{display:block}
+.panel-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:var(--shadow)}
+.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.media-card{background:#f8fbff;border:1px solid #d8e4f2;border-radius:13px;padding:15px}
+.media-card h4{margin-top:0;color:#123b73}
+.media-card img{width:100%;height:240px;object-fit:contain;background:#eef3f8;border-radius:10px;cursor:zoom-in}
+video{display:block;max-width:100%;width:100%;border-radius:10px}
+.video-box{background:#101820;max-height:390px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin:20px 0}
+.flow span{background:#edf4ff;border:1px solid #c7d9ef;padding:10px 13px;border-radius:10px;font-weight:bold}
+.q{padding:17px;border:1px solid var(--border);border-radius:13px;margin:13px 0;background:#fbfdff}
+.q label{display:block;margin:9px 0;padding:7px 9px;border-radius:8px}
+.q label:hover{background:#eef5ff}
+.result{padding:15px;background:#eef7ee;border-left:5px solid #2e8b57;border-radius:9px;margin-top:14px}
+.small{font-size:13px;color:var(--muted)}
+footer{text-align:center;padding:28px 15px;color:#62748a}
+.zoom{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.zoom.show{display:flex}
+.zoom img{max-width:94vw;max-height:90vh;background:#fff;border-radius:12px;padding:8px}
+.close{position:absolute;right:18px;top:18px;width:44px;height:44px;border-radius:50%;font-size:25px;border:0;cursor:pointer}
+.action-bar{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.badge{display:inline-block;background:#e8f1ff;color:#1457aa;border-radius:999px;padding:5px 10px;font-size:13px;font-weight:700;margin-bottom:8px}
+@media(max-width:700px){
+  header{padding:20px 14px 24px}.nav-wrap{padding:9px 6px}.nav button{padding:10px 12px}
+  main{padding:18px 10px}
+#materi>.material>.panel{padding:16px}.card,.panel-card,.material-title{padding:18px}.media-card img{height:210px}
+}
+</style></head><body>
+<header><div class="wrap"><a class="back" href="../index.html">← Kembali ke Modul</a>
+<h1>⚡ Sistem Starter Sepeda Motor</h1><p>Modul Kelistrikan — Kelas XI Teknik Sepeda Motor (TSM)</p><p><strong>SMKN 1 Kabupaten Tangerang • Guru: Wasja, S.Pd</strong></p><main></main></div></header>
+<div class="wrap">
+<nav class="nav">
+<button class="active" data-page="home">🏠 Beranda</button><button data-page="tujuan">🎯 Tujuan</button><button data-page="pretest">📝 Pre Test</button><button data-page="materi">📚 Materi</button><button data-page="media">🖼️ Gambar &amp; Video</button><button data-page="quiz">🎮 Quiz</button><button data-page="posttest">📊 Post Test</button><button data-page="lkpd">📋 LKPD</button>
+</nav>
+<section class="page active" id="home"><div class="card"><h2>Media Pembelajaran Interaktif Sistem Starter</h2>
+<p>Modul ini menggunakan <strong>materi, gambar, dan video yang Bapak upload dalam sistem-starter.zip</strong>.</p>
+<div class="grid"><div class="box"><h3>⚡ Materi 1</h3><p>Prinsif dasar motor Listrik: medan magnet, kaidah tangan kanan Fleming, ulir kanan, gaya electromagnet, dan kerja motor listrik.</p></div>
+<div class="box"><h3>🔧 Materi 2</h3><p>Sistem starter elektrik dengan motor starter: identifikasi, rangkaian, komponen, fungsi, dan cara kerja.</p></div>
+<div class="box"><h3>🔋 Materi 3</h3><p>Sistem starter elektrik dengan ACG Starter: pengertian, rangkaian, dan cara kerja.</p></div></div>
+<div class="note"><strong>Petunjuk:</strong> Pelajari materi berurutan, klik gambar untuk memperbesar, tonton video, lalu kerjakan Quiz, Post Test, dan LKPD.</div></div></section>
+<section class="page" id="tujuan"><div class="card"><h2>🎯 Tujuan Pembelajaran</h2><ol>
+<li>Menjelaskan prinsip dasar motor listrik.</li><li>Menjelaskan medan magnet pada kawat berarus listrik, kaidah tangan kanan Fleming dan ulir kanan.</li><li>Menjelaskan gaya electromagnet dan kerja motor listrik.</li><li>Mengidentifikasi sistem starter elektrik dengan motor starter.</li><li>Menjelaskan rangkaian sistem starter.</li><li>Mengidentifikasi komponen utama dan fungsinya.</li><li>Menjelaskan cara kerja sistem starter.</li><li>Menjelaskan pengertian, rangkaian, dan cara kerja ACG Starter.</li></ol></div></section>
+<section class="page" id="pretest"><div class="card"><h2>📝 Pre Test</h2><div class="note">Link Google Form Pre Test belum disertakan dalam file upload.</div></div></section>
+<section class="page" id="materi">
+<div class="card">
+<h2>📚 Materi Ajar Sistem Starter</h2>
+<div class="subnav">
+<button class="active" data-mat="m1">1. Prinsif Dasar Motor Listrik</button>
+<button data-mat="m2">2. Sistem starter elektrik dengan motor starter</button>
+<button data-mat="m3">3. Sistem Starter elektrik dengan ACG Starter</button>
+</div>
+</div>
+<div class="material active" id="m1">
+<span class="badge">Materi 1</span><h3>1. Prinsif dasar motor Listrik</h3>
+<div class="box">
+<h4>🧲 Medan Magnet di Sekitar Kawat Berarus Listrik</h4>
+<p>Kawat yang dialiri arus listrik akan menghasilkan medan magnet di sekeliling kawat tersebut.</p>
+<p>Arah medan magnet dapat ditentukan menggunakan kaidah tangan kanan. Ibu jari menunjukkan arah arus listrik, sedangkan lengkungan jari menunjukkan arah medan magnet.</p>
+<p>Semakin besar arus listrik yang mengalir, semakin kuat medan magnet yang dihasilkan. Semakin jauh jarak dari kawat, medan magnet semakin lemah.</p>
+<div class="media-grid">
+<div class="media-card"><h4>Kaidah Tangan Kanan Fleming</h4><img alt="Kaidah Tangan Kanan Fleming" class="zoomable" src="gambar/kaidah tangan kanan fleming.jpg"/></div>
+<div class="media-card"><h4>Video Medan Magnet</h4><video controls="" preload="metadata" width="100%"><source src="vidio/Medan Magnet di Sekitar Kawat Berarus Listrik.mp4" type="video/mp4"/></video></div>
+</div>
+</div>
+<div class="grid">
+<div class="box">
+<div class="media-card"><h4>Gaya Elektromagnet (Lorentz)</h4><img alt="Gaya Elektromagnet (Lorentz)" class="zoomable" src="gambar/gaya lorenzt.png"/></div>
+<div class="media-card"><h4>Video Gaya Lorentz</h4><video controls="" preload="metadata" width="100%"><source src="vidio/Vidio Gaya Elektro magnet (Lorezt).mp4" type="video/mp4"/></video></div></div>
+</div>
+<div class="box"><h4>🔄 Kerja motor listrik</h4><p>Motor listrik mengubah energi listrik menjadi gerak melalui interaksi medan magnet dan arus listrik.</p></div>
+<div class="media-card"><h4>🎥 Video Cara Kerja Motor Listrik</h4><video class="video-box" controls="" preload="metadata"><source src="vidio/cara kerja motor listrik.mp4" type="video/mp4"/></video></div>
+<div class="action-bar"><button class="btn" data-material-prev="m1" type="button">← Materi sebelumnya</button><button class="btn primary" data-material-next="m1" type="button">Materi berikutnya →</button></div></div>
+<div class="material" id="m2">
+<span class="badge">Materi 2</span><h3>2. Sistem starter elektrik dengan motor starter</h3>
+<div class="subnav">
+<button class="active" data-panel="p1">a. Identifikasi system starter</button>
+<button data-panel="p2">b. Rangkaian system starter</button>
+<button data-panel="p3">c. Komponen utama dan fungsinya</button>
+<button data-panel="p4">d. Cara Kerja system starter</button>
+</div>
+<div class="panel active" id="p1">
+<h4>a. Identifikasi system starter</h4>
+<p>Sistem starter elektrik menggunakan motor starter untuk membantu memutar mesin ketika mesin akan dihidupkan.</p>
+<p>Jenis-Jenis Sistem Starter: <br/>1. Starter Mekanik (Kick Starter): <br/>Mengandalkan tenaga fisik kaki pengendara untuk menghentak tuas dan memutar poros engkol secara langsung.<br/>2. Starter Elektrik (Electric Starter): <br/>Menggunakan motor listrik arus searah (DC) yang mengubah energi listrik dari baterai menjadi energi mekanik untuk memutar mesin<p>
+<div class="media-grid">
+<div class="media-card"><h4>Sistem Starter Mekanik - Kick Starter</h4><img alt="Contoh Sistem Starter Mekanik " class="zoomable" src="gambar/kick stater.jpg"/></div>
+<div class="media-card"><h4>Sistem Starter Elektric</h4><img alt="Sistem Starter Elktrik( Dinamo Starter)" class="zoomable" src="gambar/sistem stater elktrik.jpg"/></div>
+</div>
+</p></p></div><div class="panel" id="p2">
+<h4>b. Rangkaian system starter</h4>
+<p>Pelajari hubungan sumber listrik, sakelar/pengendali, selenoid atau magnetic switch, dan motor starter.</p>
+<div class="media-grid">
+<div class="media-card"><h4>Rangkaian Sistem Starter Model 1</h4><img alt="Rangkaian / Sistem Starter" class="zoomable" src="gambar/sistem stater model 2.jpg"/></div>
+<div class="media-card"><h4>Rangkaian Sistem Starter Model 2</h4><img alt="Rangkaian / Sistem Starter" class="zoomable" src="gambar/sistem stater model 1.jpg"/></div></div>
+<div class="flow"><span>Baterai</span>→<span>Sakelar</span>→<span>Magnetic/Selenoid Switch</span>→<span>Motor Starter</span>→<span>Mesin</span></div>
+</div><div class="panel" id="p3">
+<h4>c. Komponen utama dan fungsinya</h4>
+<div class="grid">
+<div class="box"><h4>🔋 Baterai</h4><p>Sumber energi listrik untuk sistem starter.</p></div>
+<div class="box"><h4>⚙️ Motor Starter</h4><p>Mengubah energi listrik menjadi putaran untuk memutar mesin.</p></div>
+<div class="box"><h4>🧲 Selenoid / Magnetic Switch</h4><p>Menghubungkan arus utama ke motor starter sesuai perintah sistem.</p></div>
+<div class="box"><h4>🔘 Sakelar Starter</h4><p>Memberikan perintah untuk mengaktifkan sistem starter.</p></div>
+</div>
+<div class="media-grid">
+<div class="media-card"><h4>Baterai</h4><img alt="Baterai" class="zoomable" src="gambar/baterai.jpg"/></div>
+<div class="media-card"><h4>Selenoid / Bendix Starter</h4><img alt="Selenoid / Bendix Starter" class="zoomable" src="gambar/selenoid_bendix starter.jpg"/></div>
+<div class="media-card"><h4>Motor Starter</h4><img alt="Motor Starter / Dinamo Starter" class="zoomable" src="gambar/motor starter.jpg"/></div>
+</div>
+</div><div class="panel" id="p4">
+<h4>d. Cara Kerja system starter</h4>
+<ol>
+<li>Sakelar starter diaktifkan.</li><li>Magnetic/selenoid switch bekerja.</li><li>Arus utama mengalir ke motor starter.</li><li>Motor starter berputar dan memutar mesin.</li><li>Setelah mesin hidup, sistem starter berhenti sesuai kerja sistem.</li>
+</ol>
+<div class="media-card"><h4>🎥 Video Cara Kerja Sistem Starter Sepeda Motor</h4><video class="video-box" controls="" preload="metadata"><source src="vidio/Cara Kerja Sistem Starter Sepeda Motor.mp4" type="video/mp4"/></video></div>
+</div><div class="action-bar"><button class="btn" data-material-prev="m2" type="button">← Materi sebelumnya</button><button class="btn primary" data-material-next="m2" type="button">Materi berikutnya →</button></div></div><div class="material" id="m3">
+<span class="badge">Materi 3</span><h3>3. Sistem Starter elektrik dengan ACG Starter</h3>
+<div class="subnav">
+<button class="active" data-acg="a1">a. Pengertian system ACG Starter</button>
+<button data-acg="a2">b. Rangkaian ACG Starter</button>
+<button data-acg="a3">c. Cara Kerja ACG Starter</button>
+<button data-acg="a4">d. Komponen Sistem ACG Starter</button></div>
+
+
+<div class="panel active" id="a1">
+<h4>a. Pengertian system ACG Starter</h4>
+<p>ACG Starter adalah sistem starter yang memanfaatkan unit ACG untuk membantu memutar mesin pada saat starting dan terintegrasi dengan sistem kelistrikan kendaraan.</p>
+<div class="media-grid">
+<div class="media-card"><h4>ACG Starter</h4><img alt="ACG Starter" class="zoomable" src="gambar/acg stater.png"/></div>
+<div class="media-card"><h4>Lokasi ACG Starter</h4><img alt="Lokasi ACG Starter" class="zoomable" src="gambar/lokasi acg starter.png"/></div>
+</div>
+</div>
+<div class="panel" id="a2">
+<h4>b. Rangkaian ACG Starter</h4>
+<p>Amati rangkaian ACG Starter pada gambar berikut.</p>
+<div class="media-grid"><div class="media-card"><h4>Rangkaian ACG Starter Honda Beat ESP</h4><img alt="Rangkaian ACG Starter" class="zoomable" src="gambar/rangkaian sistem ACG Starter.jpg"/></div></div>
+</div>
+<div class="panel" id="a3">
+<h4>c. Cara Kerja ACG Starter</h4>
+<ol>
+<li>Perintah starting diterima sistem pengendali.</li><li>Unit ACG bekerja menghasilkan torsi untuk membantu memutar mesin.</li><li>Mesin berputar sampai proses pembakaran membuat mesin hidup.</li><li>Setelah mesin hidup, sistem ACG bekerja sesuai fungsi sistem kendaraan.</li>
+</ol>
+<div class="media-card"><h4>🎥 Video Cara Kerja ACG Starter</h4><video class="video-box" controls="" preload="metadata"><source src="vidio/cara kerja ACG Stsrter 1.mp4" type="video/mp4"/></video></div>
+</div>
+<div class="panel" id="a4"><h4>d. Komponen Sistem ACG Starter</h4><p>Komponen utama yang mendukung kerja sistem ACG Starter dan fungsi masing-masing adalah sebagai berikut.</p><div class="grid"><div class="box"><h4>⚙️ ACG Starter (Stator dan Rotor/Flywheel)</h4><p>Unit utama yang bekerja sebagai pembangkit listrik sekaligus membantu memutar mesin saat proses starting.</p></div><div class="box"><h4>🧲 Stator ACG</h4><p>Bagian yang memiliki kumparan dan menjadi tempat terjadinya induksi elektromagnetik. Saat fungsi starter bekerja, stator menghasilkan gaya elektromagnetik untuk membantu memutar rotor.</p></div><div class="box"><h4>🔄 Rotor / Flywheel</h4><p>Bagian berputar yang membawa magnet dan terhubung dengan poros engkol. Putaran rotor diteruskan ke mesin untuk membantu proses starting.</p></div><div class="box"><h4>🎛️ ECM/ECU</h4><p>Unit pengendali elektronik yang mengatur kerja sistem sesuai kondisi dan perintah starting kendaraan.</p></div><div class="box"><h4>🔘 Sakelar Starter</h4><p>Memberikan perintah starting ketika pengendara menekan tombol starter.</p></div><div class="box"><h4>🔋 Baterai</h4><p>Menyediakan sumber energi listrik yang diperlukan sistem kelistrikan dan proses starting.</p></div><div class="box"><h4>🧭 Sensor CKP</h4><p>Mendeteksi posisi dan putaran poros engkol sehingga sistem pengendali dapat menentukan kondisi kerja mesin.</p></div><div class="box"><h4>🔌 Kabel dan Konektor</h4><p>Menghubungkan ACG Starter dengan sistem pengendali dan komponen kelistrikan lainnya.</p></div></div><div class="note"><strong>Catatan:</strong> Susunan komponen dapat berbeda menurut tipe sepeda motor. Cocokkan dengan gambar rangkaian ACG Starter pada materi.</div></div><div class="action-bar"><button class="btn" data-material-prev="m3" type="button">← Materi sebelumnya</button><button class="btn primary" data-material-next="m3" type="button">Materi berikutnya →</button></div></div></section></div>
+<div class="action-bar"><button class="btn" data-material-prev="m3" type="button">← Materi sebelumnya</button><button class="btn primary" data-material-next="m3" type="button">Materi berikutnya →</button></div></div></section></div>
+
+
+<section class="page" id="media"><div class="card"><h2>🖼️ Gambar &amp; Video dari Upload</h2><p>Seluruh media berikut berasal dari file <strong>sistem-starter.zip</strong>.</p>
+<h3>Gambar (9)</h3><div class="media-grid"><div class="media-card"><h4>ACG Starter</h4><img alt="ACG Starter" class="zoomable" src="gambar/acg stater.png"/><p class="small">acg stater.png</p></div><div class="media-card"><h4>Baterai</h4><img alt="Baterai" class="zoomable" src="gambar/baterai.jpg"/><p class="small">baterai.jpg</p></div><div class="media-card"><h4>Kaidah Tangan Kanan Fleming</h4><img alt="Kaidah Tangan Kanan Fleming" class="zoomable" src="gambar/kaidah tangan kanan fleming.jpg"/><p class="small">kaidah tangan kanan fleming.jpg</p></div><div class="media-card"><h4>Kaidah Tangan Kiri Fleming</h4><img alt="Kaidah Tangan Kiri Fleming" class="zoomable" src="gambar/kaidah tangan kiri fleming.jpg"/><p class="small">kaidah tangan kiri fleming.jpg</p></div><div class="media-card"><h4>Lokasi ACG Starter</h4><img alt="Lokasi ACG Starter" class="zoomable" src="gambar/lokasi acg starter.png"/><p class="small">lokasi acg starter.png</p></div><div class="media-card"><h4>Motor Starter / Dinamo Starter</h4><img alt="Motor Starter / Dinamo Starter" class="zoomable" src="gambar/motor starter.jpg"/><p class="small">motor starter.jpg</p></div><div class="media-card"><h4>Rangkaian ACG Starter</h4><img alt="Rangkaian ACG Starter" class="zoomable" src="gambar/rangkaian ACG Starter.jpg"/><p class="small">rangkaian ACG Starter.jpg</p></div><div class="media-card"><h4>Selenoid / Bendix Starter</h4><img alt="Selenoid / Bendix Starter" class="zoomable" src="gambar/selenoid_bendix starter.jpg"/><p class="small">selenoid_bendix starter.jpg</p></div><div class="media-card"><h4>Rangkaian / Sistem Starter</h4><img alt="Rangkaian / Sistem Starter" class="zoomable" src="gambar/sistem starter.jpg"/><p class="small">sistem starter.jpg</p></div></div>
+<h3>Video (2)</h3><div class="media-grid"><div class="media-card"><h4>🎥 Cara Kerja Sistem Starter Sepeda Motor</h4><video class="video-box" controls="" preload="metadata"><source src="vidio/Cara Kerja Sistem Starter Sepeda Motor.mp4" type="video/mp4"/></video><p class="small">Cara Kerja Sistem Starter Sepeda Motor.mp4</p></div><div class="media-card"><h4>🎥 cara kerja sistem starter ACG,,,starter halus</h4><video class="video-box" controls="" preload="metadata"><source src="vidio/cara kerja sistem starter ACG,,,starter halus.mp4" type="video/mp4"/></video><p class="small">cara kerja sistem starter ACG,,,starter halus.mp4</p></div></div>
+<div class="note">File upload berisi 9 gambar dan 2 video. Tidak ada video ketiga pada ZIP yang Bapak upload.</div></div></section>
+<section class="page" id="quiz"><div class="card"><h2>🎮 Quiz Sistem Starter</h2>
+<div class="q"><b>1. Fungsi utama motor starter adalah...</b><label><input name="q1" type="radio" value="a"/> Memutar mesin saat starting</label><label><input name="q1" type="radio" value="b"/> Mengisi bahan bakar</label><label><input name="q1" type="radio" value="c"/> Mendinginkan mesin</label></div>
+<div class="q"><b>2. Arus listrik pada kawat dapat menimbulkan...</b><label><input name="q2" type="radio" value="a"/> Medan magnet</label><label><input name="q2" type="radio" value="b"/> Oli</label><label><input name="q2" type="radio" value="c"/> Udara</label></div>
+<div class="q"><b>3. Komponen yang menghubungkan arus utama ke motor starter adalah...</b><label><input name="q3" type="radio" value="a"/> Selenoid/Magnetic Switch</label><label><input name="q3" type="radio" value="b"/> Busi</label><label><input name="q3" type="radio" value="c"/> Lampu</label></div>
+<button class="btn primary" id="calc">Hitung Nilai</button><div class="result" id="quizResult" style="display:none"></div></div></section>
+<section class="page" id="posttest"><div class="card"><h2>📊 Post Test</h2><div class="note">Link Google Form Post Test belum disertakan dalam file upload.</div></div></section>
+<section class="page" id="lkpd"><div class="card"><h2>📋 LKPD / Jobsheet</h2><ol><li>Identifikasi komponen sistem starter.</li><li>Catat fungsi baterai, motor starter, dan selenoid/magnetic switch.</li><li>Amati rangkaian sistem starter.</li><li>Jelaskan cara kerja sistem starter.</li><li>Amati rangkaian dan lokasi ACG Starter.</li><li>Jelaskan cara kerja ACG Starter.</li><li>Buat kesimpulan hasil pengamatan.</li></ol></div></section>
+<footer>Media Pembelajaran Interaktif • Sistem Starter • Kelas XI TSM</footer>
+<div class="zoom" id="zoom"><button class="close" id="close">×</button><img id="zoomImg"/></div>
+<script>
+const $=id=>document.getElementById(id);
+
+document.querySelectorAll('.nav button').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    const page=$(btn.dataset.page);
+    if(page) page.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+function tabs(containerSelector,buttonAttr,contentSelector){
+  const container=document.querySelector(containerSelector);
+  if(!container)return;
+  const buttons=[...container.querySelectorAll('button['+buttonAttr+']')];
+
+  // Cari .material terdekat sebagai ruang kerja tab.
+  const scope=container.closest('.material') || container.parentElement;
+
+  buttons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      buttons.forEach(x=>x.classList.remove('active'));
+      scope.querySelectorAll(contentSelector).forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      const target=$(btn.getAttribute(buttonAttr));
+      if(target)target.classList.add('active');
+    });
+  });
+}
+// Tab Materi 1, 2, 3 berada di dalam kartu navigasi,
+// sedangkan isi .material berada di luar kartu tersebut.
+const materiTabButtons=[...document.querySelectorAll('#materi > .card .subnav button[data-mat]')];
+materiTabButtons.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    // Aktifkan tombol yang dipilih.
+    materiTabButtons.forEach(x=>x.classList.remove('active'));
+
+    // Sembunyikan SEMUA materi utama terlebih dahulu.
+    document.querySelectorAll('#materi > .material').forEach(x=>{
+      x.classList.remove('active');
+    });
+
+    // Tampilkan hanya materi yang dipilih.
+    btn.classList.add('active');
+    const target=$(btn.getAttribute('data-mat'));
+    if(target){
+      target.classList.add('active');
+
+      // Saat berpindah materi, selalu buka submateri pertama.
+      const firstSub=target.querySelector('.subnav button[data-panel], .subnav button[data-acg]');
+      const subAttr=firstSub ? (firstSub.hasAttribute('data-panel') ? 'data-panel' : 'data-acg') : null;
+      if(firstSub && subAttr){
+        const buttons=[...target.querySelectorAll('.subnav button['+subAttr+']')];
+        buttons.forEach(x=>x.classList.remove('active'));
+        firstSub.classList.add('active');
+
+        const panelSelector=subAttr==='data-panel' ? '.panel' : '.panel';
+        target.querySelectorAll(panelSelector).forEach(x=>x.classList.remove('active'));
+        const firstPanel=$(firstSub.getAttribute(subAttr));
+        if(firstPanel) firstPanel.classList.add('active');
+      }
+    }
+
+    document.getElementById('materi').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+tabs('#m2 > .subnav','data-panel','.panel');
+tabs('#m3 > .subnav','data-acg','.panel');
+
+const materialIds=['m1','m2','m3'];
+document.querySelectorAll('[data-material-prev]').forEach(btn=>{
+  const current=materialIds.indexOf(btn.dataset.materialPrev);
+  if(current<=0){
+    btn.style.visibility='hidden';
+  }
+  btn.addEventListener('click',()=>{
+    const i=Math.max(0,current-1);
+    const tab=document.querySelector('[data-mat="'+materialIds[i]+'"]');
+    if(tab)tab.click();
+  });
+});
+document.querySelectorAll('[data-material-next]').forEach(btn=>{
+  const current=materialIds.indexOf(btn.dataset.materialNext);
+  if(current>=materialIds.length-1){
+    btn.style.visibility='hidden';
+  }
+  btn.addEventListener('click',()=>{
+    const i=Math.min(materialIds.length-1,current+1);
+    const tab=document.querySelector('[data-mat="'+materialIds[i]+'"]');
+    if(tab)tab.click();
+  });
+});
+
+document.querySelectorAll('.zoomable').forEach(img=>{
+  img.addEventListener('click',()=>{
+    $('zoomImg').src=img.src;
+    $('zoomImg').alt=img.alt||'';
+    $('zoom').classList.add('show');
+  });
+});
+$('close').addEventListener('click',()=>$('zoom').classList.remove('show'));
+$('zoom').addEventListener('click',e=>{
+  if(e.target===$('zoom'))$('zoom').classList.remove('show');
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')$('zoom').classList.remove('show');
+});
+
+$('calc').addEventListener('click',()=>{
+  const answers=['a','a','a'];let correct=0;
+  answers.forEach((answer,i)=>{
+    const checked=document.querySelector('input[name="q'+(i+1)+'"]:checked');
+    if(checked&&checked.value===answer)correct++;
+  });
+  $('quizResult').style.display='block';
+  $('quizResult').innerHTML='<strong>Nilai: '+Math.round(correct/answers.length*100)+'/100</strong><br>Benar: '+correct+'/'+answers.length;
+});
+</script></body></html>
